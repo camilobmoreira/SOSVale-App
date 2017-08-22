@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_sign_in">Entre ou registre</string>
+    <string name="action_sign_in_short">Entre</string>
+    <string name="error_field_required">Este campo é obrigatório</string>
+    <string name="error_incorrect_password">A senha está incorreta</string>
+    <string name="error_invalid_email">O email é invalido</string>
+    <string name="error_invalid_password">A senha é muito curta</string>
+    <string name="prompt_email">Email / Cpf / Login</string>
+    <string name="prompt_password">Senha</string>
+    <string name="title_activity_login">Entrar</string>
+    <string name="recent_posts">Posts Recentes</string>
+</resources>
