@@ -118,13 +118,13 @@ public class Post implements Comparator<Date> {
             for (int i = 0; i < response.length(); i++) {
                 JSONObject obj = response.getJSONObject(i);
                 found.add(new Post(
-                        obj.getString("title"),
-                        obj.getString("description"),
+                        obj.getString("titulo"),
+                        obj.getString("descricao"),
                         null /*obj.getString("location")*/,
-                        null /*obj.getString("image")*/,
-                        obj.getString("username"),
-                        obj.getString("postType"),
-                        null /*obj.getString("postingDate")*/
+                        null /*obj.getString("imagem")*/,
+                        obj.getString("nomeUsuario"),
+                        obj.getString("categoria"),
+                        null /*obj.getString("data")*/
                 ));
             }
         } catch (JSONException e) {

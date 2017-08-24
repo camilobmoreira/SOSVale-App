@@ -1,10 +1,13 @@
 package com.example.cam.sosvale_app;
 
+import android.graphics.Color;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -31,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        final TextView postTitle = (TextView) findViewById(R.id.post_title);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -79,31 +80,55 @@ public class MainActivity extends AppCompatActivity {
 
         List<Post> allApprovedPosts = null;
         try {
-            allApprovedPosts = Post.findAllItens(new JSONArray(result.toString()));
-            Log.d("test", String.valueOf(allApprovedPosts.size()));
 
-            //postTitle.setText(allApprovedPosts.toString());
+            // Transforma o JSON em uma lista de posts
+            allApprovedPosts = Post.findAllItens(new JSONArray(result.toString()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        /*ScrollView scrollView = new ScrollView(this);
+        // Se a lista não for nula ou o tamanho não for 0, itera sobre a lista adicionando a tela
+        if (allApprovedPosts != null && allApprovedPosts.size() > 0) {
 
-        for (Post p : allApprovedPosts) {
+            LinearLayout mainLinearLayout = (LinearLayout) findViewById(R.id.main_linear_layout);
 
-
-            TextView titleTextView = new TextView(this);
-
-        }*/
-
-
+            ViewGroup.LayoutParams LLParams = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
 
 
+            for (Post p : allApprovedPosts) {
+
+                // Criando novo layout para cada post
+                LinearLayout linearLayout = new LinearLayout(this);
+                linearLayout.setLayoutParams(LLParams);
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+                // Definindo atributos do post
+                TextView titleTextView = new TextView(this);
+                titleTextView.setText("Titulo: " +  p.getTitle());
+                titleTextView.setLayoutParams(LLParams);
+                linearLayout.addView(titleTextView);
+
+                TextView descriptionTextView = new TextView(this);
+                descriptionTextView.setText("Descricao: " + p.getDescription());
+                descriptionTextView.setLayoutParams(LLParams);
+                linearLayout.addView(descriptionTextView);
+
+                TextView postTypeTextView = new TextView(this);
+                postTypeTextView.setText("Categoria: " + p.getPostType());
+                postTypeTextView.setLayoutParams(LLParams);
+                linearLayout.addView(postTypeTextView);
 
 
+                LinearLayout line = new LinearLayout(this);
+                line.setMinimumHeight(1);
+                line.setBackgroundColor(Color.BLACK);
 
-
-
+                mainLinearLayout.addView(linearLayout);
+                mainLinearLayout.addView(line);
+            }
+        }
 
     }
 
