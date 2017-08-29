@@ -111,26 +111,4 @@ public class Post implements Comparator<Date> {
         return d1.compareTo(d2);
     }
 
-    public static List<Post> findAllItens(JSONArray response) {
-        List<Post> found = new ArrayList<>();
-
-        try {
-            for (int i = 0; i < response.length(); i++) {
-                JSONObject obj = response.getJSONObject(i);
-                found.add(new Post(
-                        obj.getString("titulo"),
-                        obj.getString("descricao"),
-                        null /*obj.getString("location")*/,
-                        null /*obj.getString("imagem")*/,
-                        obj.getString("nomeUsuario"),
-                        obj.getString("categoria"),
-                        null /*obj.getString("data")*/
-                ));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return found;
-    }
 }
