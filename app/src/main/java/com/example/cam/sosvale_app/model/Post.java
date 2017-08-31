@@ -1,13 +1,8 @@
 package com.example.cam.sosvale_app.model;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by cam on 21/08/17.
@@ -18,19 +13,18 @@ public class Post implements Comparator<Date> {
     private String title;
     private String description;
     private Location location;
-    private Image image;
+    private String image;
     private String username;
     private String postType;
-    private Date postingDate;
+    private Calendar postingDate;
     private boolean approved = false;
 
-    /*public Post () {
+    public Post () {
         super();
         this.approved = false;
-    }*/
+    }
 
-    public Post(String title, String description, Location location, Image image, String username, String postType,
-                Date postingDate) {
+    public Post(String title, String description, Location location, String image, String username, String postType) {
         super();
         this.title = title;
         this.description = description;
@@ -38,7 +32,7 @@ public class Post implements Comparator<Date> {
         this.image = image;
         this.username = username;
         this.postType = postType;
-        this.postingDate = postingDate;
+        this.postingDate = Calendar.getInstance();
     }
 
     public String getTitle() {
@@ -65,11 +59,11 @@ public class Post implements Comparator<Date> {
         this.location = location;
     }
 
-    public Image getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -89,11 +83,11 @@ public class Post implements Comparator<Date> {
         this.postType = postType;
     }
 
-    public Date getPostingDate() {
+    public Calendar getPostingDate() {
         return postingDate;
     }
 
-    public void setPostingDate(Date postingDate) {
+    public void setPostingDate(Calendar postingDate) {
         this.postingDate = postingDate;
     }
 
@@ -110,5 +104,4 @@ public class Post implements Comparator<Date> {
         // TODO Auto-generated method stub
         return d1.compareTo(d2);
     }
-
 }

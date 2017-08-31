@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.example.cam.sosvale_app.model.Model;
 import com.example.cam.sosvale_app.model.Post;
 
+import org.json.JSONArray;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,21 +20,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Model model = new Model();
-        Connection connection = new Connection();
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        Connection connection = new Connection();
 
+        // Pega todos os posts do webservice
+        JSONArray jsonArrayPosts = connection.sendRequest("GET", "/search/post/ApprovedPosts");
 
-        List<Post> allApprovedPosts = null;
-        // Transforma o JSON em uma lista de posts
-        allApprovedPosts = model.findAllPosts(connection.sendRequest("GET", "/search/post/ApprovedPosts"));
+        Model model = new Model(connection, jsonArrayPosts/*, jsonArrayUsers*/);
+        List<Post> allApprovedPosts = model.getAllApprovedPosts();
+
+        preenchePosts(allApprovedPosts);
+    }
+
+    public void preenchePosts(List<Post> allApprovedPosts) {
 
         // Se a lista não for nula ou o tamanho não for 0, itera sobre a lista adicionando à tela
         if (allApprovedPosts != null && allApprovedPosts.size() > 0) {
@@ -76,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
                 mainLinearLayout.addView(line);
             }
         }
-
     }
 
 

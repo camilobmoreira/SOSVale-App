@@ -11,11 +11,12 @@ import org.json.JSONException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by cam on 28/08/17.
@@ -70,18 +71,21 @@ public class Connection {
             jsonArray = new JSONArray(result.toString());
         } catch (JSONException e) {
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
 
         return jsonArray;
     }
 
-    public List<Object> convertJSON (JSONArray jsonArray) {
+    public List<Post> convertJSONToPostList (JSONArray jsonArray) {
         Gson gson = new Gson();
 
-        //FIXME ARRUMAR UM PRA CADA TIPO DE LISTA
-        if(jsonArray.toString().contains("title")) {
-            List<Post> posts = gson.fromJson(jsonArray.toString(), new TypeToken<List<Post>>(){}.getType());
-            return  posts;
-        }
+        //Type collectionType = new TypeToken<Collection<Post>>(){}.getType();
+        //Collection<Post>  posts = gson.fromJson(jsonArray.toString(), collectionType);
+
+        List<Post> posts = gson.fromJson(jsonArray.toString(), new TypeToken<List<Post>>(){}.getType());
+
+        return posts;
     }
 }

@@ -15,30 +15,19 @@ import java.util.List;
 
 public class Model {
 
-    Connection connection = null;
-    //FIXME CRIAR LISTA PARA CADA TIPO DE VARIAVEL (POST, USER)
+    private Connection connection = null;
+    private List<Post> allApprovedPosts = null;
+    private List<User> allUsers = null;
 
-    // FIXME USAR GSON PARA CONVERTER OS JSON
-    public List<Post> findAllPosts(JSONArray response) {
-        List<Post> found = new ArrayList<>();
-
-        try {
-            for (int i = 0; i < response.length(); i++) {
-                JSONObject obj = response.getJSONObject(i);
-                found.add(new Post(
-                        obj.getString("title"),
-                        obj.getString("description"),
-                        null /*obj.getString("location")*/,
-                        null /*obj.getString("imagem")*/,
-                        obj.getString("username"),
-                        obj.getString("postType"),
-                        null /*obj.getString("data")*/
-                ));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return found;
+    public Model(Connection connection, JSONArray jsonArrayPosts/*, JSONArray jsonArrayUsers*/) {
+        this.connection = connection;
+        this.allApprovedPosts = this.connection.convertJSONToPostList(jsonArrayPosts);
+        /*this.allUsers = this.connection.convertJSONToPostList(jsonArrayUsers);*/
     }
+
+    public List<Post> getAllApprovedPosts() {
+        return this.allApprovedPosts;
+    }
+
+
 }
