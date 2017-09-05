@@ -29,10 +29,12 @@ public class MainActivity extends AppCompatActivity {
         Connection connection = new Connection();
 
         // Pega todos os posts do webservice
-        JSONArray jsonArrayPosts = connection.sendRequest("GET", "/search/post/ApprovedPosts");
+        JSONArray jsonArrayPosts = connection.sendRequest("/search/post/ApprovedPosts");
 
         Model model = new Model(connection, jsonArrayPosts/*, jsonArrayUsers*/);
         List<Post> allApprovedPosts = model.getAllApprovedPosts();
+
+        model.printList();
 
         preenchePosts(allApprovedPosts);
     }
@@ -59,19 +61,19 @@ public class MainActivity extends AppCompatActivity {
                 // Definindo atributos do post
                 TextView titleTextView = new TextView(this);
                 titleTextView.setText("Titulo: " +  p.getTitle());
-                titleTextView.setLayoutParams(LLParams);
                 linearLayout.addView(titleTextView);
 
                 TextView descriptionTextView = new TextView(this);
                 descriptionTextView.setText("Descricao: " + p.getDescription());
-                descriptionTextView.setLayoutParams(LLParams);
                 linearLayout.addView(descriptionTextView);
 
                 TextView postTypeTextView = new TextView(this);
                 postTypeTextView.setText("Categoria: " + p.getPostType());
-                postTypeTextView.setLayoutParams(LLParams);
                 linearLayout.addView(postTypeTextView);
 
+                TextView usernameTextView = new TextView(this);
+                usernameTextView.setText("Usuário: " + p.getUsername());
+                linearLayout.addView(usernameTextView);
 
                 LinearLayout line = new LinearLayout(this);
                 line.setMinimumHeight(1);

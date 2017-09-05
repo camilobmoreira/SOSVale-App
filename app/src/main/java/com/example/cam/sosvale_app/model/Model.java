@@ -29,5 +29,12 @@ public class Model {
         return this.allApprovedPosts;
     }
 
+    public void printList(){
+        for(Post post:this.allApprovedPosts){
+            System.out.println(post.getTitle());
+            System.out.println(post.getDescription());
+        }
+    }
+
 
 }
