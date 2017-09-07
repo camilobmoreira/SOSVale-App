@@ -2,14 +2,17 @@ package com.example.cam.sosvale_app;
 
 import android.content.ContentValues;
 import android.icu.util.Output;
+import android.util.Log;
 
 import com.example.cam.sosvale_app.config.WebService;
 import com.example.cam.sosvale_app.model.Post;
+import com.example.cam.sosvale_app.model.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -21,8 +24,12 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by cam on 28/08/17.
@@ -45,8 +52,8 @@ public class Connection {
             con.setRequestMethod("GET");
 
             int responseCode = con.getResponseCode();
-            System.out.println("Sending \'GET\' request to URL : " + url);
-            System.out.println("Response Code : " + responseCode);
+            Log.d("http-request", "Sending \'GET\' request to URL : " + url);
+            Log.d("http-request", "Response Code : " + responseCode);
 
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(con.getInputStream())
@@ -99,43 +106,50 @@ public class Connection {
             con.setDoInput(true);
             con.setDoOutput(true);
 
-
-            ContentValues values = new ContentValues();
-            values.put("username", username);
-            values.put("password", password);
+            JSONObject postDataParams = new JSONObject();
+            postDataParams.put("username", username);
+            postDataParams.put("password", password);
+            Log.d("params", postDataParams.toString());
 
             OutputStream outputStream = con.getOutputStream();
 
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
-            bufferedWriter.write("");
+            bufferedWriter.write(getPostDataString(postDataParams));
+
             bufferedWriter.flush();
+            bufferedWriter.close();
+            outputStream.close();
 
             int responseCode = con.getResponseCode();
-            System.out.println("Sending \'POST\' request to URL : " + url);
-            System.out.println("Response Code : " + responseCode);
+            Log.d("http-request", "Sending \'POST\' request to URL : " + url);
+            Log.d("http-request", "Response Code : " + responseCode);
 
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream())
-            );
 
-            String inputLine;
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(con.getInputStream())
+                );
 
-            // Reading data
-            while ((inputLine = in.readLine()) != null) {
-                result.append(inputLine);
+                result.append(in.readLine());
+
+                // Closing BufferedReader
+                in.close();
+            } else {
+                return new JSONArray("false : "+responseCode);
             }
-
-            // Closing BufferedReader
-            in.close();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
                 con.disconnect();
             } catch (Exception e) {
-                e.printStackTrace(); //If you want further info on failure...
+                e.printStackTrace();
             }
         }
 
@@ -160,5 +174,41 @@ public class Connection {
         List<Post> posts = gson.fromJson(jsonArray.toString(), new TypeToken<List<Post>>(){}.getType());
 
         return posts;
+    }
+
+    public List<User> convertJSONToUserList (JSONArray jsonArray) {
+        Gson gson = new Gson();
+
+        //Type collectionType = new TypeToken<Collection<Post>>(){}.getType();
+        //Collection<Post>  posts = gson.fromJson(jsonArray.toString(), collectionType);
+
+        List<User> users = gson.fromJson(jsonArray.toString(), new TypeToken<List<User>>(){}.getType());
+
+        return users;
+    }
+
+    public String getPostDataString(JSONObject params) throws Exception {
+
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+
+        Iterator<String> itr = params.keys();
+
+        while(itr.hasNext()){
+
+            String key= itr.next();
+            Object value = params.get(key);
+
+            if (first) {
+                first = false;
+            } else {
+                result.append("&");
+            }
+
+            result.append(URLEncoder.encode(key, "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(value.toString(), "UTF-8"));
+        }
+        return result.toString();
     }
 }

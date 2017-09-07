@@ -34,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
         Model model = new Model(connection, jsonArrayPosts/*, jsonArrayUsers*/);
         List<Post> allApprovedPosts = model.getAllApprovedPosts();
 
-        model.printList();
-
         preenchePosts(allApprovedPosts);
     }
 
