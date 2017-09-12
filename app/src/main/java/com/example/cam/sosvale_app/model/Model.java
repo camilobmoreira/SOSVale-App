@@ -37,11 +37,11 @@ public class Model {
     public User login(String username, String password) {
         JSONArray jsonArray = null;
         if (username.contains("@")) {
-            jsonArray = connection.sendLoginRequest(WebService.DOMAIN_URL + "/login/email", username, password);
-        } else if (username.contains("abc")) {
-            jsonArray = connection.sendLoginRequest(WebService.DOMAIN_URL + "/login/username", username, password);
+            jsonArray = connection.sendLoginRequest("/login/email", username, password);
+        } else if (username.contains("a")) { //FIXME
+            jsonArray = connection.sendLoginRequest("/login/username", username, password);
         } else {
-            jsonArray = connection.sendLoginRequest(WebService.DOMAIN_URL + "/login/cpf", username, password);
+            jsonArray = connection.sendLoginRequest("/login/cpf", username, password);
         }
 
          return connection.convertJSONToUserList(jsonArray).get(0);

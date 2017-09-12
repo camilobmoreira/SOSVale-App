@@ -135,7 +135,7 @@ public class Connection {
                 // Closing BufferedReader
                 in.close();
             } else {
-                return new JSONArray("false : "+responseCode);
+                return new JSONArray("false : " + responseCode);
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();

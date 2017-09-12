@@ -187,9 +187,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             mAuthTask = new UserLoginTask(username, password);
 
+            mAuthTask.execute((Void) null);
 
-
-            if (false/*User.getAccountType() == 0*/) {
+            if (loggedUser == null) {
+                return;
+            } else if (false/*User.getAccountType() == 0*/) {
                 // Send to approve post activity
                 Intent mainActivityIntent = new Intent(this, MainActivity.class); //FIXME
                 startActivity(mainActivityIntent);
@@ -319,7 +321,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-
             loggedUser = model.login(mUsername, mPassword);
 
             return loggedUser != null;
