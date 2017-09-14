@@ -187,21 +187,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             mAuthTask = new UserLoginTask(username, password);
 
-            mAuthTask.execute((Void) null);
+            mAuthTask.execute((Void) null); //FIXME
 
-            if (loggedUser == null) {
-                return;
-            } else if (false/*User.getAccountType() == 0*/) {
-                // Send to approve post activity
-                Intent mainActivityIntent = new Intent(this, MainActivity.class); //FIXME
-                startActivity(mainActivityIntent);
-            } else {
-                // Send to main activity
-                Intent mainActivityIntent = new Intent(this, MainActivity.class);
-                startActivity(mainActivityIntent);
+            if (loggedUser != null) {
+                openMainActivity();
             }
-            //mAuthTask.execute((Void) null);
         }
+    }
+
+    protected void openMainActivity() {
+        Intent mainActivityIntent = new Intent(this, MainActivity.class);
+        startActivity(mainActivityIntent);
     }
 
     private boolean isEmailValid(String email) {
@@ -332,7 +328,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                finish();
+                openMainActivity(); //FIXME
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
