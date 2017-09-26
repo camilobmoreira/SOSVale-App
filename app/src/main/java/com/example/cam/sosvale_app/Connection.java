@@ -1,7 +1,5 @@
 package com.example.cam.sosvale_app;
 
-import android.content.ContentValues;
-import android.icu.util.Output;
 import android.util.Log;
 
 import com.example.cam.sosvale_app.config.WebService;
@@ -20,12 +18,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -37,7 +33,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class Connection {
 
-    public JSONArray sendRequest(String routeUrl) {
+    public JSONArray sendGetRequest(String routeUrl) {
 
         final StringBuilder result = new StringBuilder();
 
@@ -46,8 +42,6 @@ public class Connection {
         try {
             URL url = new URL(WebService.DOMAIN_URL + routeUrl);
             con = (HttpURLConnection) url.openConnection();
-            con.setDoInput(true);
-            con.setDoOutput(true);
 
             con.setRequestMethod("GET");
 

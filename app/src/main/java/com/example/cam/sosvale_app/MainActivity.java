@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         Connection connection = new Connection();
 
         // Pega todos os posts do webservice
-        JSONArray jsonArrayPosts = connection.sendRequest("/search/post/ApprovedPosts");
+        JSONArray jsonArrayPosts = connection.sendGetRequest("/search/post/ApprovedPosts");
 
         Model model = new Model(connection, jsonArrayPosts/*, jsonArrayUsers*/);
         List<Post> allApprovedPosts = model.getAllApprovedPosts();
