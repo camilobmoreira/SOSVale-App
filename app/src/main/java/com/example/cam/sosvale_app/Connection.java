@@ -118,7 +118,6 @@ public class Connection {
             Log.d("http-request", "Sending \'POST\' request to URL : " + url);
             Log.d("http-request", "Response Code : " + responseCode);
 
-
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(con.getInputStream())

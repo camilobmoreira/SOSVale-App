@@ -1,5 +1,7 @@
 package com.example.cam.sosvale_app.model;
 
+import android.util.Log;
+
 import com.example.cam.sosvale_app.Connection;
 import com.example.cam.sosvale_app.config.WebService;
 
@@ -38,13 +40,22 @@ public class Model {
         JSONArray jsonArray = null;
         if (username.contains("@")) {
             jsonArray = connection.sendLoginRequest("/login/email", username, password);
-        } else if (username.contains("a")) { //FIXME
-            jsonArray = connection.sendLoginRequest("/login/username", username, password);
-        } else {
+        } else if (username.matches("[0-9]+")) {
             jsonArray = connection.sendLoginRequest("/login/cpf", username, password);
+        } else {
+            jsonArray = connection.sendLoginRequest("/login/username", username, password);
         }
 
-         return connection.convertJSONToUserList(jsonArray).get(0);
+        try {
+            if (jsonArray.getJSONObject(0).getString("status").equalsIgnoreCase("0")) {
+                return null;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return connection.convertJSONToUserList(jsonArray).get(0);
+
     }
 
 
