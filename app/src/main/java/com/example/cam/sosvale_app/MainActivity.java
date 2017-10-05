@@ -1,10 +1,14 @@
 package com.example.cam.sosvale_app;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.StrictMode;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,6 +30,14 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        FloatingActionButton mNewPostButton = (FloatingActionButton) findViewById(R.id.new_post_floating_action_button);
+        mNewPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openNewPostActivity();
+            }
+        });
+
         Connection connection = new Connection();
 
         // Pega todos os posts do webservice
@@ -35,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
         List<Post> allApprovedPosts = model.getAllApprovedPosts();
 
         preenchePosts(allApprovedPosts);
+    }
+
+    private void openNewPostActivity() {
+        Intent newPostActivityIntent = new Intent(this, NewPostActivity.class);
+        startActivity(newPostActivityIntent);
     }
 
     public void preenchePosts(List<Post> allApprovedPosts) {
