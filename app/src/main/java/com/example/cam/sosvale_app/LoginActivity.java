@@ -23,6 +23,8 @@ import android.widget.TextView;
 import com.example.cam.sosvale_app.model.Model;
 import com.example.cam.sosvale_app.model.User;
 
+import org.json.JSONException;
+
 /**
  * A login screen that offers login via email/id number/login and password.
  */
@@ -133,6 +135,11 @@ public class LoginActivity extends AppCompatActivity {
 
     protected void openMainActivity() {
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
+        try {
+            mainActivityIntent.putExtra("user", connection.convertUserToJSONObject(loggedUser).toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         startActivity(mainActivityIntent);
     }
 

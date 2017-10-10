@@ -8,21 +8,33 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.cam.sosvale_app.model.Model;
 import com.example.cam.sosvale_app.model.Post;
+import com.example.cam.sosvale_app.model.User;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private User loggedUser;
+    private Connection connection = new Connection();
+    private Model model = new Model(connection);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        try {
+            loggedUser = connection.convertJSONToUser(new JSONObject(getIntent().getExtras().get("user").toString()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -46,15 +58,20 @@ public class MainActivity extends AppCompatActivity {
         Model model = new Model(connection, jsonArrayPosts/*, jsonArrayUsers*/);
         List<Post> allApprovedPosts = model.getAllApprovedPosts();
 
-        preenchePosts(allApprovedPosts);
+        fillInPosts(allApprovedPosts);
     }
 
     private void openNewPostActivity() {
         Intent newPostActivityIntent = new Intent(this, NewPostActivity.class);
+        try {
+            newPostActivityIntent.putExtra("user", connection.convertUserToJSONObject(loggedUser).toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         startActivity(newPostActivityIntent);
     }
 
-    public void preenchePosts(List<Post> allApprovedPosts) {
+    public void fillInPosts(List<Post> allApprovedPosts) {
 
         // Se a lista não for nula ou o tamanho não for 0, itera sobre a lista adicionando à tela
         if (allApprovedPosts != null && allApprovedPosts.size() > 0) {

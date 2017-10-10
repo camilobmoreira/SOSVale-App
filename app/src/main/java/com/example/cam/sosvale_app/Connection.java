@@ -87,7 +87,6 @@ public class Connection {
     }
 
     public JSONArray sendLoginRequest(String routeUrl, String username, String password) {
-        //https://www.studytutorial.in/android-httpurlconnection-post-and-get-request-tutorial
 
         final StringBuilder result = new StringBuilder();
 
@@ -158,26 +157,115 @@ public class Connection {
         return jsonArray;
     }
 
+    public JSONArray sendNewPostRequest(String routeUrl, Post post) {
+
+        final StringBuilder result = new StringBuilder();
+
+        HttpURLConnection con = null;
+
+        try {
+            URL url = new URL(WebService.DOMAIN_URL + routeUrl);
+            con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+            con.setDoInput(true);
+            con.setDoOutput(true);
+
+            /*JSONObject postDataParams = new JSONObject();
+            postDataParams.put("title", post.getTitle());
+            postDataParams.put("description", post.getDescription());
+            postDataParams.put("image", post.getImage());
+            postDataParams.put("latitude", post.getLocation().getLatitude());
+            postDataParams.put("longitude", post.getLocation().getLongitude());
+            postDataParams.put("postType", post.getPostType());
+            postDataParams.put("username", post.getUsername());*/
+
+            JSONObject postDataParams = convertPostToJSONObject(post);
+
+            Log.d("params", postDataParams.toString());
+
+            OutputStream outputStream = con.getOutputStream();
+
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
+            bufferedWriter.write(getPostDataString(postDataParams));
+
+            bufferedWriter.flush();
+            bufferedWriter.close();
+            outputStream.close();
+
+            int responseCode = con.getResponseCode();
+            Log.d("http-request", "Sending \'POST\' request to URL : " + url);
+            Log.d("http-request", "Response Code : " + responseCode);
+
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(con.getInputStream())
+                );
+
+                result.append(in.readLine());
+
+                // Closing BufferedReader
+                in.close();
+            } else {
+                return new JSONArray("false : " + responseCode);
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        JSONArray jsonArray = null;
+        try {
+            jsonArray = new JSONArray(result.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        return jsonArray;
+    }
+
     public List<Post> convertJSONToPostList (JSONArray jsonArray) {
-        Gson gson = new Gson();
 
         //Type collectionType = new TypeToken<Collection<Post>>(){}.getType();
         //Collection<Post>  posts = gson.fromJson(jsonArray.toString(), collectionType);
 
-        List<Post> posts = gson.fromJson(jsonArray.toString(), new TypeToken<List<Post>>(){}.getType());
+        List<Post> posts = new Gson().fromJson(jsonArray.toString(), new TypeToken<List<Post>>(){}.getType());
 
         return posts;
     }
 
     public List<User> convertJSONToUserList (JSONArray jsonArray) {
-        Gson gson = new Gson();
 
         //Type collectionType = new TypeToken<Collection<Post>>(){}.getType();
         //Collection<Post>  posts = gson.fromJson(jsonArray.toString(), collectionType);
 
-        List<User> users = gson.fromJson(jsonArray.toString(), new TypeToken<List<User>>(){}.getType());
+        List<User> users = new Gson().fromJson(jsonArray.toString(), new TypeToken<List<User>>(){}.getType());
 
         return users;
+    }
+
+    public User convertJSONToUser(JSONObject jsonObject) {
+        return new Gson().fromJson(jsonObject.toString(), User.class);
+    }
+
+    public JSONObject convertUserToJSONObject(User user) throws  JSONException {
+        return new JSONObject(new Gson().toJson(user));
+    }
+
+    public JSONObject convertPostToJSONObject(Post post) throws JSONException {
+        return  new JSONObject(new Gson().toJson(post));
     }
 
     public String getPostDataString(JSONObject params) throws Exception {
