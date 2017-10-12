@@ -1,6 +1,5 @@
 package com.example.cam.sosvale_app.model;
 
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -16,7 +15,7 @@ public class Post implements Comparator<Date> {
     private String image;
     private String username;
     private String postType;
-    private Calendar postingDate;
+    private Date postingDate;
     private boolean approved = false;
 
     public Post () {
@@ -24,7 +23,7 @@ public class Post implements Comparator<Date> {
         this.approved = false;
     }
 
-    public Post(String title, String description, Location location, String image, String username, String postType) {
+    public Post(String title, String description, Location location, String image, String username, String postType, Date postingDate) {
         super();
         this.title = title;
         this.description = description;
@@ -32,7 +31,7 @@ public class Post implements Comparator<Date> {
         this.image = image;
         this.username = username;
         this.postType = postType;
-        this.postingDate = Calendar.getInstance();
+        this.postingDate = postingDate;
     }
 
     public String getTitle() {
@@ -83,11 +82,11 @@ public class Post implements Comparator<Date> {
         this.postType = postType;
     }
 
-    public Calendar getPostingDate() {
+    public Date getPostingDate() {
         return postingDate;
     }
 
-    public void setPostingDate(Calendar postingDate) {
+    public void setPostingDate(Date postingDate) {
         this.postingDate = postingDate;
     }
 

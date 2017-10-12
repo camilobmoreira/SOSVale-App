@@ -6,5 +6,6 @@ package com.example.cam.sosvale_app.config;
 
 public class WebService {
 
-    public static final String DOMAIN_URL = "http://192.168.43.205:4567"; //FIXME ARRUMAR IP TODA VEZ QUE FOR RODAR
+    //public static final String DOMAIN_URL = "http://192.168.43.205:4567"; //FIXME ARRUMAR IP TODA VEZ QUE FOR RODAR
+    public static final String DOMAIN_URL = "http://172.16.12.32:4567"; //FIXME ARRUMAR IP TODA VEZ QUE FOR RODAR
 }

@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NewPostActivity extends AppCompatActivity {
@@ -81,6 +82,7 @@ public class NewPostActivity extends AppCompatActivity {
         post.setImage(imageEditText.getText().toString());
         post.setPostType(postTypeSpinner.getSelectedItem().toString());
         post.setUsername(loggedUser.getUsername());
+        post.setPostingDate(new Date());
 
         model.addPost(post);
     }

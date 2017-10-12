@@ -170,16 +170,17 @@ public class Connection {
             con.setDoInput(true);
             con.setDoOutput(true);
 
-            /*JSONObject postDataParams = new JSONObject();
+            JSONObject postDataParams = new JSONObject();
             postDataParams.put("title", post.getTitle());
             postDataParams.put("description", post.getDescription());
             postDataParams.put("image", post.getImage());
             postDataParams.put("latitude", post.getLocation().getLatitude());
             postDataParams.put("longitude", post.getLocation().getLongitude());
             postDataParams.put("postType", post.getPostType());
-            postDataParams.put("username", post.getUsername());*/
+            postDataParams.put("username", post.getUsername());
+            postDataParams.put("postingDate", post.getPostingDate());
 
-            JSONObject postDataParams = convertPostToJSONObject(post);
+            //JSONObject postDataParams = convertPostToJSONObject(post); //FIXME arrumar conversao e usar
 
             Log.d("params", postDataParams.toString());
 
