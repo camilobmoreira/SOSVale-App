@@ -1,5 +1,6 @@
 package com.example.cam.sosvale_app;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -55,6 +56,9 @@ public class NewPostActivity extends AppCompatActivity {
         Spinner postTypeSpinner = (Spinner) findViewById(R.id.postTypeSpinner);
         postTypeSpinner.setAdapter(adapter);
 
+        //Set current location to latitude and longitude EditText
+        //// FIXME: 25/10/17
+
         Button mNewPostButton = (Button) findViewById(R.id.new_post_button);
         mNewPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +66,20 @@ public class NewPostActivity extends AppCompatActivity {
                 newPost();
             }
         });
+
+        Button mOpenMapButton = (Button) findViewById(R.id.openMapButton);
+        mOpenMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMapActivity();
+            }
+        });
+    }
+
+    private void openMapActivity() {
+        Intent openMapActivityIntent = new Intent(this, MapsActivity.class);
+        startActivityForResult(openMapActivityIntent, 0);
+        //// FIXME: 25/10/17 PEGAR RESULTADO E DEFINIR NOS EDIT TEXT
     }
 
     private void newPost() {

@@ -157,7 +157,16 @@ public class Connection {
         return jsonArray;
     }
 
-    public JSONArray sendNewPostRequest(String routeUrl, Post post) {
+    /**
+     * Send a simple post request that the only paramater is a post, eg:
+     * /add/post
+     * /approve/post
+     *
+     * @param routeUrl route of the request
+     * @param post post to be sent
+     * @return
+     */
+    public JSONArray sendSimplePostRequest(String routeUrl, Post post) {
 
         final StringBuilder result = new StringBuilder();
 

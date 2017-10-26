@@ -67,13 +67,14 @@
         android:layout_margin="10dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:inputType="none"
         android:hint="Latitude" />
 
     <TextView
         android:id="@+id/longitudeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
         android:layout_alignTop="@id/descriptionEditText"
         android:layout_marginTop="75dp"
         android:layout_marginLeft="15dp"
@@ -84,12 +85,25 @@
         android:id="@+id/longitudeEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
         android:layout_alignTop="@id/longitudeTextView"
         android:layout_margin="10dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:inputType="none"
         android:hint="Longitude" />
+
+    <Button
+        android:id="@+id/openMapButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/longitudeTextView"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true"
+        android:text="Abrir Mapa"/>
 
     <TextView
         android:id="@+id/imageUrlTextView"

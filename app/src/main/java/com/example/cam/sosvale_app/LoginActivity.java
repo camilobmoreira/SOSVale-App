@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -128,19 +129,37 @@ public class LoginActivity extends AppCompatActivity {
             mAuthTask.execute((Void) null); //FIXME
 
             if (loggedUser != null) {
-                openMainActivity();
+                if (loggedUser.getAccountType() == (byte)0) {
+                    Log.d("teste", "0");
+                    openApprovePostsActivity();
+                } else if (loggedUser.getAccountType() == (byte)1) {
+                    Log.d("teste", "1");
+                    openRecentPostsActivity();
+                } else {
+                    Log.d("teste", "none");
+                }
             }
         }
     }
 
-    protected void openMainActivity() {
-        Intent mainActivityIntent = new Intent(this, MainActivity.class);
+    private void openApprovePostsActivity() {
+        Intent approvePostsActivityIntent = new Intent(this, ApprovePostsActivity.class);
         try {
-            mainActivityIntent.putExtra("user", connection.convertUserToJSONObject(loggedUser).toString());
+            approvePostsActivityIntent.putExtra("user", connection.convertUserToJSONObject(loggedUser).toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        startActivity(mainActivityIntent);
+        startActivity(approvePostsActivityIntent);
+    }
+
+    protected void openRecentPostsActivity() {
+        Intent recentPostsActivityIntent = new Intent(this, RecentPostsActivity.class);
+        try {
+            recentPostsActivityIntent.putExtra("user", connection.convertUserToJSONObject(loggedUser).toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        startActivity(recentPostsActivityIntent);
     }
 
     private boolean isPasswordValid(String password) {
@@ -212,7 +231,7 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                openMainActivity(); //FIXME
+                openRecentPostsActivity(); //FIXME
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

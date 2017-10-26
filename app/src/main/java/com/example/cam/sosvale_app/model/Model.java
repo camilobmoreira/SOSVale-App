@@ -1,15 +1,10 @@
 package com.example.cam.sosvale_app.model;
 
-import android.util.Log;
-
 import com.example.cam.sosvale_app.Connection;
-import com.example.cam.sosvale_app.config.WebService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +14,7 @@ import java.util.List;
 public class Model {
 
     private Connection connection = null;
-    private List<Post> allApprovedPosts = null;
+    private List<Post> posts = null;
     private List<User> allUsers = null;
 
     public Model(Connection connection) {
@@ -28,12 +23,12 @@ public class Model {
 
     public Model(Connection connection, JSONArray jsonArrayPosts/*, JSONArray jsonArrayUsers*/) {
         this.connection = connection;
-        this.allApprovedPosts = this.connection.convertJSONToPostList(jsonArrayPosts);
+        this.posts = this.connection.convertJSONToPostList(jsonArrayPosts);
         /*this.allUsers = this.connection.convertJSONToPostList(jsonArrayUsers);*/
     }
 
-    public List<Post> getAllApprovedPosts() {
-        return this.allApprovedPosts;
+    public List<Post> getPosts() {
+        return this.posts;
     }
 
     public User login(String username, String password) {
@@ -46,7 +41,7 @@ public class Model {
             jsonArray = connection.sendLoginRequest("/login/username", username, password);
         }
 
-        User user = null;
+        User user;
         try {
             user = connection.convertJSONToUser(jsonArray.getJSONObject(0));
 
@@ -63,6 +58,10 @@ public class Model {
     }
 
     public JSONArray addPost(Post post) {
-        return connection.sendNewPostRequest("/add/post", post);
+        return connection.sendSimplePostRequest("/add/post", post);
+    }
+
+    public JSONArray approvePost(Post post) {
+        return connection.sendSimplePostRequest("/approve/post", post);
     }
 }

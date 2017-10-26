@@ -21,7 +21,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class RecentPostsActivity extends AppCompatActivity {
 
     private User loggedUser;
     private Connection connection = new Connection();
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         JSONArray jsonArrayPosts = connection.sendGetRequest("/search/post/ApprovedPosts");
 
         Model model = new Model(connection, jsonArrayPosts/*, jsonArrayUsers*/);
-        List<Post> allApprovedPosts = model.getAllApprovedPosts();
+        List<Post> allApprovedPosts = model.getPosts();
 
         fillInPosts(allApprovedPosts);
     }
@@ -71,10 +71,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(newPostActivityIntent);
     }
 
-    public void fillInPosts(List<Post> allApprovedPosts) {
+    public void fillInPosts(List<Post> posts) {
 
         // Se a lista não for nula ou o tamanho não for 0, itera sobre a lista adicionando à tela
-        if (allApprovedPosts != null && allApprovedPosts.size() > 0) {
+        if (posts != null && posts.size() > 0) {
 
             LinearLayout mainLinearLayout = (LinearLayout) findViewById(R.id.main_linear_layout);
 
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                     ViewGroup.LayoutParams.MATCH_PARENT);
 
 
-            for (Post p : allApprovedPosts) {
+            for (Post p : posts) {
 
                 // Criando novo layout para cada post
                 LinearLayout linearLayout = new LinearLayout(this);
