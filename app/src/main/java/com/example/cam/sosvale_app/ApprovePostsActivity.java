@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -37,9 +38,6 @@ public class ApprovePostsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
@@ -59,7 +57,7 @@ public class ApprovePostsActivity extends AppCompatActivity {
         // Se a lista não for nula ou o tamanho não for 0, itera sobre a lista adicionando à tela
         if (posts != null && posts.size() > 0) {
 
-            LinearLayout mainLinearLayout = (LinearLayout) findViewById(R.id.main_linear_layout);
+            LinearLayout approveLinearLayout = (LinearLayout) findViewById(R.id.approve_linear_layout);
 
             ViewGroup.LayoutParams LLParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -107,8 +105,8 @@ public class ApprovePostsActivity extends AppCompatActivity {
                 line.setMinimumHeight(1);
                 line.setBackgroundColor(Color.BLACK);
 
-                mainLinearLayout.addView(linearLayout);
-                mainLinearLayout.addView(line);
+                approveLinearLayout.addView(linearLayout);
+                approveLinearLayout.addView(line);
             }
         }
     }

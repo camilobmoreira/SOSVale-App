@@ -127,18 +127,6 @@ public class LoginActivity extends AppCompatActivity {
             mAuthTask = new UserLoginTask(username, password);
 
             mAuthTask.execute((Void) null); //FIXME
-
-            if (loggedUser != null) {
-                if (loggedUser.getAccountType() == (byte)0) {
-                    Log.d("teste", "0");
-                    openApprovePostsActivity();
-                } else if (loggedUser.getAccountType() == (byte)1) {
-                    Log.d("teste", "1");
-                    openRecentPostsActivity();
-                } else {
-                    Log.d("teste", "none");
-                }
-            }
         }
     }
 
@@ -231,7 +219,11 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                openRecentPostsActivity(); //FIXME
+                if (loggedUser.getAccountType() == (byte)0) {
+                    openApprovePostsActivity();
+                } else if (loggedUser.getAccountType() == (byte)1) {
+                    openRecentPostsActivity();
+                }
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

@@ -33,8 +33,14 @@
         </activity>
         <activity
             android:name=".RecentPostsActivity"
-            android:label="@string/recent_posts" />
-        <activity android:name=".NewPostActivity" />
+            android:label="@string/recent_posts" >
+        </activity>
+        <activity android:name=".NewPostActivity" >
+        </activity>
+        <activity
+            android:name=".ApprovePostsActivity"
+            android:label="@string/approve_posts">
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -50,9 +56,6 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity
-            android:name=".ApprovePostsActivity"
-            android:label="Approve Posts"/>
     </application>
 
 </manifest>

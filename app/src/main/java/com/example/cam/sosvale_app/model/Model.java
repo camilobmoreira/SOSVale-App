@@ -51,6 +51,9 @@ public class Model {
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return null;
         }
 
         return user;
