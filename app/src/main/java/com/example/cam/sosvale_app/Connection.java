@@ -1,5 +1,6 @@
 package com.example.cam.sosvale_app;
 
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.example.cam.sosvale_app.config.WebService;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -23,6 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -301,5 +304,72 @@ public class Connection {
             result.append(URLEncoder.encode(value.toString(), "UTF-8"));
         }
         return result.toString();
+    }
+
+    public List<Marker> getData() throws JSONException {
+
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+
+        final StringBuilder result = new StringBuilder();
+
+        URL url;
+        HttpURLConnection urlConnection = null;
+        try {
+            url = new URL("https://api.myjson.com/bins/23k9u");
+
+            urlConnection = (HttpURLConnection) url
+                    .openConnection();
+
+            InputStream in = urlConnection.getInputStream();
+
+            InputStreamReader isw = new InputStreamReader(in);
+
+
+
+            int data = isw.read();
+            while (data != -1) {
+                char current = (char) data;
+                data = isw.read();
+                result.append(current);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                urlConnection.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println(result);
+
+        List<Marker> finalResult = generateJSON(new JSONArray(result.toString()));
+
+        return finalResult;
+    }
+
+
+    public List<Marker> generateJSON(JSONArray json){
+
+        List<Marker> found = new LinkedList<Marker>();
+
+        try {
+
+
+            for (int i = 0; i < json.length(); i++) {
+                JSONObject obj = json.getJSONObject(i);
+                found.add(new Marker(obj.getJSONObject("geometry").getJSONArray("coordinates").getDouble(0),obj.getJSONObject("geometry").getJSONArray("coordinates").getDouble(1), obj.getJSONObject("properties").getString("name")));
+            }
+
+        } catch (JSONException e) {
+            // handle exception
+        }
+
+        return found;
+
     }
 }
