@@ -1,8 +1,9 @@
 package com.example.cam.sosvale_app;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,6 +14,8 @@ import com.example.cam.sosvale_app.model.Location;
 import com.example.cam.sosvale_app.model.Model;
 import com.example.cam.sosvale_app.model.Post;
 import com.example.cam.sosvale_app.model.User;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,11 +24,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NewPostActivity extends AppCompatActivity {
+public class NewPostActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks {
 
     private User loggedUser;
     private Connection connection = new Connection();
     private Model model = new Model(connection);
+    private GoogleApiClient mGoogleApiClient;
+    private android.location.Location mLastLocation;
 
     private EditText titleEditText;
     private EditText descriptionEditText;
@@ -56,8 +61,20 @@ public class NewPostActivity extends AppCompatActivity {
         Spinner postTypeSpinner = (Spinner) findViewById(R.id.postTypeSpinner);
         postTypeSpinner.setAdapter(adapter);
 
+        //Ask for permitions
+        //// FIXME: 08/11/17 pedir permissao para pegar localizacao
+        
         //Set current location to latitude and longitude EditText
-        //// FIXME: 25/10/17
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
 
         Button mNewPostButton = (Button) findViewById(R.id.new_post_button);
         mNewPostButton.setOnClickListener(new View.OnClickListener() {
@@ -103,5 +120,21 @@ public class NewPostActivity extends AppCompatActivity {
         post.setPostingDate(new Date());
 
         model.addPost(post);
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            latitudeEditText.setText(String.valueOf(mLastLocation.getLatitude()));
+            longitudeEditText.setText(String.valueOf(mLastLocation.getLongitude()));
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
     }
 }
