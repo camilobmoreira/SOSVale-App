@@ -80,6 +80,28 @@ public class NewPostActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        Button mNewPostButton = (Button) findViewById(R.id.new_post_button);
+        mNewPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newPost();
+            }
+        });
+
+        Button mOpenMapButton = (Button) findViewById(R.id.openMapButton);
+        mOpenMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMapActivity();
+            }
+        });
+
+    }
+
+    private void openMapActivity() {
+        Intent openMapActivityIntent = new Intent(this, MapsActivity.class);
+        startActivityForResult(openMapActivityIntent, 0);
+        //// FIXME: 25/10/17 PEGAR RESULTADO E DEFINIR NOS EDIT TEXT
     }
 
     private void newPost() {
@@ -95,8 +117,8 @@ public class NewPostActivity extends AppCompatActivity {
         post.setTitle(titleEditText.getText().toString());
         post.setDescription(descriptionEditText.getText().toString());
         post.setLocation(new Location(
-                    Double.parseDouble(latitudeEditText.getText().toString()),
-                    Double.parseDouble(longitudeEditText.getText().toString())));
+                Double.parseDouble(latitudeEditText.getText().toString()),
+                Double.parseDouble(longitudeEditText.getText().toString())));
         post.setImage(imageEditText.getText().toString());
         post.setPostType(postTypeSpinner.getSelectedItem().toString());
         post.setUsername(loggedUser.getUsername());
