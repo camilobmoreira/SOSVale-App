@@ -307,14 +307,10 @@ public class Connection {
     }
 
     public List<Marker> getData() throws JSONException {
-
-
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-
         final StringBuilder result = new StringBuilder();
-
         URL url;
         HttpURLConnection urlConnection = null;
         try {
@@ -324,9 +320,7 @@ public class Connection {
                     .openConnection();
 
             InputStream in = urlConnection.getInputStream();
-
             InputStreamReader isw = new InputStreamReader(in);
-
 
 
             int data = isw.read();
@@ -346,9 +340,7 @@ public class Connection {
         }
 
         System.out.println(result);
-
         List<Marker> finalResult = generateJSON(new JSONArray(result.toString()));
-
         return finalResult;
     }
 
@@ -356,19 +348,14 @@ public class Connection {
     public List<Marker> generateJSON(JSONArray json){
 
         List<Marker> found = new LinkedList<Marker>();
-
         try {
-
-
             for (int i = 0; i < json.length(); i++) {
                 JSONObject obj = json.getJSONObject(i);
                 found.add(new Marker(obj.getJSONObject("geometry").getJSONArray("coordinates").getDouble(0),obj.getJSONObject("geometry").getJSONArray("coordinates").getDouble(1), obj.getJSONObject("properties").getString("name")));
             }
-
         } catch (JSONException e) {
             // handle exception
         }
-
         return found;
 
     }

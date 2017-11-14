@@ -1,8 +1,14 @@
 package com.example.cam.sosvale_app;
 
+import android.*;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -16,6 +22,9 @@ import com.example.cam.sosvale_app.model.Post;
 import com.example.cam.sosvale_app.model.User;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,13 +33,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NewPostActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks {
-
+public class NewPostActivity extends AppCompatActivity {
+    private List<Marker> markers;
     private User loggedUser;
     private Connection connection = new Connection();
     private Model model = new Model(connection);
-    private GoogleApiClient mGoogleApiClient;
-    private android.location.Location mLastLocation;
 
     private EditText titleEditText;
     private EditText descriptionEditText;
@@ -61,43 +68,18 @@ public class NewPostActivity extends AppCompatActivity implements GoogleApiClien
         Spinner postTypeSpinner = (Spinner) findViewById(R.id.postTypeSpinner);
         postTypeSpinner.setAdapter(adapter);
 
-        //Ask for permitions
-        //// FIXME: 08/11/17 pedir permissao para pegar localizacao
-        
-        //Set current location to latitude and longitude EditText
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
+        try {
+            List<Marker> markers = connection.getData();
+            System.out.println(markers.get(0).getLat());
+            System.out.println(markers.get(0).getLon());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
-        Button mNewPostButton = (Button) findViewById(R.id.new_post_button);
-        mNewPostButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                newPost();
-            }
-        });
-
-        Button mOpenMapButton = (Button) findViewById(R.id.openMapButton);
-        mOpenMapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openMapActivity();
-            }
-        });
     }
 
-    private void openMapActivity() {
-        Intent openMapActivityIntent = new Intent(this, MapsActivity.class);
-        startActivityForResult(openMapActivityIntent, 0);
-        //// FIXME: 25/10/17 PEGAR RESULTADO E DEFINIR NOS EDIT TEXT
-    }
+
 
     private void newPost() {
         titleEditText = (EditText) findViewById(R.id.titleEditText);
@@ -122,19 +104,4 @@ public class NewPostActivity extends AppCompatActivity implements GoogleApiClien
         model.addPost(post);
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        if (mLastLocation != null) {
-            latitudeEditText.setText(String.valueOf(mLastLocation.getLatitude()));
-            longitudeEditText.setText(String.valueOf(mLastLocation.getLongitude()));
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
 }
