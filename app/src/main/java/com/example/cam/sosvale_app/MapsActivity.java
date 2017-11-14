@@ -46,11 +46,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             for (Marker marker : this.markers) {
                 map.addMarker(new MarkerOptions().position(new LatLng(marker.getLat(), marker.getLon())).title(marker.getDesc()));
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
 
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         LocationListener gps = new GPS(map, this.markers);

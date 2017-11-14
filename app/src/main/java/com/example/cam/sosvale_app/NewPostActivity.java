@@ -66,20 +66,21 @@ public class NewPostActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, postTypeArray);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner postTypeSpinner = (Spinner) findViewById(R.id.postTypeSpinner);
+        EditText latitude = (EditText) findViewById(R.id.latitudeEditText);
+        EditText longitude = (EditText) findViewById(R.id.longitudeEditText);
+
         postTypeSpinner.setAdapter(adapter);
 
         try {
             List<Marker> markers = connection.getData();
-            System.out.println(markers.get(0).getLat());
-            System.out.println(markers.get(0).getLon());
+            latitude.setText(markers.get(0).getLat().toString());
+            longitude.setText(markers.get(0).getLon().toString());
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
     }
-
-
 
     private void newPost() {
         titleEditText = (EditText) findViewById(R.id.titleEditText);
