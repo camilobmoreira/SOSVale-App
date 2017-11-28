@@ -9,19 +9,23 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import com.google.android.gms.maps.CameraUpdateFactory;
+
+import com.example.cam.sosvale_app.model.Model;
+import com.example.cam.sosvale_app.model.Post;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private Connection con = new Connection();
-    private List<Marker> markers;
+    Model model = new Model(con);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +45,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap map) {
 
-        try {
-            this.markers = con.getData();
-            for (Marker marker : this.markers) {
-                map.addMarker(new MarkerOptions().position(new LatLng(marker.getLat(), marker.getLon())).title(marker.getDesc()));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        // Pega todos os posts do webservice
+        List<Marker> mark = null;
+        for(Post p : model.getPosts()) {
+            Marker m = new Marker(p.getLocation().getLatitude(),p.getLocation().getLongitude(),p.getTitle());
+            mark.add(m);
+        }
+        for (Marker marker : mark) {
+            map.addMarker(new MarkerOptions().position(new LatLng(marker.getLat(), marker.getLon())).title(marker.getDesc()));
         }
 
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        LocationListener gps = new GPS(map, this.markers);
+        LocationListener gps = new GPS(map, mark);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions

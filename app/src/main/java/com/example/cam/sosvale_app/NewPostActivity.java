@@ -26,6 +26,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -88,21 +89,20 @@ public class NewPostActivity extends AppCompatActivity {
             }
         });
 
-        Button mOpenMapButton = (Button) findViewById(R.id.openMapButton);
-        mOpenMapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openMapActivity();
-            }
-        });
-
+       // Button mOpenMapButton = (Button) findViewById(R.id.openMapButton);
+       // mOpenMapButton.setOnClickListener(new View.OnClickListener() {
+           // @Override
+           // public void onClick(View view) {
+              //  openMapActivity();
+            //}
+       // });
     }
 
-    private void openMapActivity() {
-        Intent openMapActivityIntent = new Intent(this, MapsActivity.class);
-        startActivityForResult(openMapActivityIntent, 0);
+   // private void openMapActivity() {
+        ////Intent openMapActivityIntent = new Intent(this, MapsActivity.class);
+        /////startActivityForResult(openMapActivityIntent, 0);
         //// FIXME: 25/10/17 PEGAR RESULTADO E DEFINIR NOS EDIT TEXT
-    }
+  //  }
 
     private void newPost() {
         titleEditText = (EditText) findViewById(R.id.titleEditText);

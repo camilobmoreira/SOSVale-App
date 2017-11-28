@@ -97,13 +97,14 @@
         android:id="@+id/openMapButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_alignTop="@id/longitudeTextView"
-        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_alignParentRight="true"
-        android:text="Abrir Mapa"/>
+        android:layout_marginTop="5dp"
+        android:text="Abrir Mapa"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/imageUrlTextView"

@@ -314,7 +314,8 @@ public class Connection {
         URL url;
         HttpURLConnection urlConnection = null;
         try {
-            url = new URL("https://api.myjson.com/bins/23k9u");
+
+            url = new URL("/search/post/ApprovedPosts");
 
             urlConnection = (HttpURLConnection) url
                     .openConnection();
