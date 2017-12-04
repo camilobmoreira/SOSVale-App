@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,7 +26,7 @@ public class RecentPostsActivity extends AppCompatActivity {
 
     private User loggedUser;
     private Connection connection = new Connection();
-    private Model model = new Model(connection);
+    private Model model = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,14 @@ public class RecentPostsActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        FloatingActionButton mOpenMapButton = (FloatingActionButton) findViewById(R.id.open_all_on_map_floating_action_button);
+        mOpenMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMapActivity();
+            }
+        });
+
         FloatingActionButton mNewPostButton = (FloatingActionButton) findViewById(R.id.new_post_floating_action_button);
         mNewPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,10 +64,16 @@ public class RecentPostsActivity extends AppCompatActivity {
         // Pega todos os posts do webservice
         JSONArray jsonArrayPosts = connection.sendGetRequest("/search/post/ApprovedPosts");
 
-        Model model = new Model(connection, jsonArrayPosts/*, jsonArrayUsers*/);
+        model = new Model(connection, jsonArrayPosts/*, jsonArrayUsers*/);
         List<Post> allApprovedPosts = model.getPosts();
 
         fillInPosts(allApprovedPosts);
+    }
+
+    private void openMapActivity() {
+        Intent openMapActivityIntent = new Intent(this, MapsActivity.class);
+        startActivityForResult(openMapActivityIntent, 0);
+        //// FIXME: 25/10/17 PEGAR RESULTADO E DEFINIR NOS EDIT TEXT
     }
 
     private void openNewPostActivity() {

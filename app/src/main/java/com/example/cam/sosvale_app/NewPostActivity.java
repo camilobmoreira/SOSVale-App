@@ -10,11 +10,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.cam.sosvale_app.model.Location;
 import com.example.cam.sosvale_app.model.Model;
@@ -88,23 +90,11 @@ public class NewPostActivity extends AppCompatActivity {
                 newPost();
             }
         });
-
-       // Button mOpenMapButton = (Button) findViewById(R.id.openMapButton);
-       // mOpenMapButton.setOnClickListener(new View.OnClickListener() {
-           // @Override
-           // public void onClick(View view) {
-              //  openMapActivity();
-            //}
-       // });
     }
 
-   // private void openMapActivity() {
-        ////Intent openMapActivityIntent = new Intent(this, MapsActivity.class);
-        /////startActivityForResult(openMapActivityIntent, 0);
-        //// FIXME: 25/10/17 PEGAR RESULTADO E DEFINIR NOS EDIT TEXT
-  //  }
-
     private void newPost() {
+        String mensagem;
+
         titleEditText = (EditText) findViewById(R.id.titleEditText);
         descriptionEditText = (EditText) findViewById(R.id.descriptionEditText);
         latitudeEditText = (EditText) findViewById(R.id.latitudeEditText);
@@ -116,15 +106,36 @@ public class NewPostActivity extends AppCompatActivity {
 
         post.setTitle(titleEditText.getText().toString());
         post.setDescription(descriptionEditText.getText().toString());
-        post.setLocation(new Location(
-                Double.parseDouble(latitudeEditText.getText().toString()),
-                Double.parseDouble(longitudeEditText.getText().toString())));
+        try {
+            post.setLocation(new Location(
+                    Double.parseDouble(latitudeEditText.getText().toString()),
+                    Double.parseDouble(longitudeEditText.getText().toString())));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
         post.setImage(imageEditText.getText().toString());
         post.setPostType(postTypeSpinner.getSelectedItem().toString());
         post.setUsername(loggedUser.getUsername());
         post.setPostingDate(new Date());
 
-        model.addPost(post);
+        JSONArray jsonArray = model.addPost(post);
+
+
+        try {
+            mensagem = jsonArray.getJSONObject(0).getString("mensagem");
+            titleEditText.setText("");
+            descriptionEditText.setText("");
+            latitudeEditText.setText("");
+            longitudeEditText.setText("");
+            imageEditText.setText("");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            mensagem = e.getMessage();
+        }
+
+        Toast toast = Toast.makeText(this, mensagem, Toast.LENGTH_LONG);
+        toast.show();
     }
 
 }

@@ -4,6 +4,7 @@ import android.os.StrictMode;
 import android.util.Log;
 
 import com.example.cam.sosvale_app.config.WebService;
+import com.example.cam.sosvale_app.model.Location;
 import com.example.cam.sosvale_app.model.Post;
 import com.example.cam.sosvale_app.model.User;
 import com.google.gson.Gson;
@@ -24,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -249,12 +251,105 @@ public class Connection {
         return jsonArray;
     }
 
+    public JSONArray sendSimplePostRequest(String routeUrl, String postTitle) {
+
+        final StringBuilder result = new StringBuilder();
+
+        HttpURLConnection con = null;
+
+        try {
+            URL url = new URL(WebService.DOMAIN_URL + routeUrl);
+            con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+            con.setDoInput(true);
+            con.setDoOutput(true);
+
+            JSONObject postDataParams = new JSONObject();
+            postDataParams.put("title", postTitle);
+
+            //JSONObject postDataParams = convertPostToJSONObject(post); //FIXME arrumar conversao e usar
+
+            Log.d("params", postDataParams.toString());
+
+            OutputStream outputStream = con.getOutputStream();
+
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
+            bufferedWriter.write(getPostDataString(postDataParams));
+
+            bufferedWriter.flush();
+            bufferedWriter.close();
+            outputStream.close();
+
+            int responseCode = con.getResponseCode();
+            Log.d("http-request", "Sending \'POST\' request to URL : " + url);
+            Log.d("http-request", "Response Code : " + responseCode);
+
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(con.getInputStream())
+                );
+
+                result.append(in.readLine());
+
+                // Closing BufferedReader
+                in.close();
+            } else {
+                return new JSONArray("false : " + responseCode);
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        JSONArray jsonArray = null;
+        try {
+            jsonArray = new JSONArray(result.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        return jsonArray;
+    }
+
     public List<Post> convertJSONToPostList (JSONArray jsonArray) {
 
-        //Type collectionType = new TypeToken<Collection<Post>>(){}.getType();
-        //Collection<Post>  posts = gson.fromJson(jsonArray.toString(), collectionType);
-
         List<Post> posts = new Gson().fromJson(jsonArray.toString(), new TypeToken<List<Post>>(){}.getType());
+        /*List<Post> posts = null;
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                Post p = new Post();
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                p.setImage(jsonObject.getString("image"));
+                Location location = new Location();
+                location.setLatitude(jsonObject.getDouble("latitude"));
+                location.setLongitude(jsonObject.getDouble("longitude"));
+                p.setLocation(location);
+                p.setUsername(jsonObject.getString("username"));
+                p.setDescription(jsonObject.getString("description"));
+                p.setPostType(jsonObject.getString("postType"));
+                p.setPostingDate(new Date(jsonObject.getString("postingDate")));
+
+                posts.add(p);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }*/
 
         return posts;
     }

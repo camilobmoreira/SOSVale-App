@@ -65,6 +65,6 @@ public class Model {
     }
 
     public JSONArray approvePost(Post post) {
-        return connection.sendSimplePostRequest("/approve/post", post);
+        return connection.sendSimplePostRequest("/approve/post", post.getTitle());
     }
 }

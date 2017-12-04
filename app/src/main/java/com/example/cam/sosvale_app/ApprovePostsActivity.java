@@ -96,6 +96,7 @@ public class ApprovePostsActivity extends AppCompatActivity {
                 approvePost.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        Log.d("post", p.getTitle());
                         model.approvePost(p);
                     }
                 });

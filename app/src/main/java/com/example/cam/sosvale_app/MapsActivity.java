@@ -25,12 +25,17 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private Connection con = new Connection();
-    Model model = new Model(con);
+    Model model = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        // Pega todos os posts do webservice
+        JSONArray jsonArrayPosts = con.sendGetRequest("/search/post/ApprovedPosts");
+
+        model = new Model(con, jsonArrayPosts/*, jsonArrayUsers*/);
 
         //obter o mapa da view
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
